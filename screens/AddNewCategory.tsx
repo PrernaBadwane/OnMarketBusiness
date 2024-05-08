@@ -22,6 +22,9 @@ const AddNewCategory = () => {
   const [price, setPrice] = useState('');
   const [hsnCode, setHsnCode] = useState('');
   const [gst, setGST] = useState('');
+
+
+  // save this data on data based
   const [data, setData] = useState({});
 
   const handleCategoryChange = (text: string) => {

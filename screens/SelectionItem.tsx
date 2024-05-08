@@ -23,19 +23,25 @@ interface ItemProps {
   onPress: (product: Product) => void;
 }
 
-const Item: React.FC<ItemProps> = ({ item, onPress }) => {
-  const [inputPrice, setInputPrice] = useState('');
 
+
+const Item: React.FC<ItemProps> = ({ item, onPress }) => {
+
+
+  // custom price input
+  const [inputPrice, setInputPrice] = useState('');
+  const handleInputChange = (text: string) => {
+    setInputPrice(text);
+  };
+
+// handle on onpess event to add item in cart
   const handlePress = () => {
     if (item.price > 0) {
       onPress(item);
     }
   };
 
-  const handleInputChange = (text: string) => {
-    setInputPrice(text);
-  };
-
+  //  handle on onpess event to add item in cart if price of product is not predefined
   const handleAddToCart = () => {
     const price = parseFloat(inputPrice);
     if (!isNaN(price) && price > 0) {
@@ -75,6 +81,7 @@ const Item: React.FC<ItemProps> = ({ item, onPress }) => {
 
 const SelectionItem: React.FC = () => {
   const [cart, setCart] = useState<Product[]>([]);
+  const [toBuy, setToBuy] = useState<Product[]>([]);
   const [payableAmount, setPayableAmount] = useState('');
     const [totalAmount, setTotalAmount] = useState(0);
     const handlePayableChange = (text: string) => {
@@ -92,6 +99,7 @@ const SelectionItem: React.FC = () => {
     <Item
       item={item}
       onPress={(product) => {
+        // this card value will get added to data base as they are in card at the moment
         setCart([...cart, product]);
       }}
     />

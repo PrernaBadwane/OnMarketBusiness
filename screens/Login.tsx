@@ -53,9 +53,10 @@ const Login= ({navigation}:LoginProps) => {
               onChangeText={handlePhoneChange}
               value={phoneNumber}
               cursorColor="#9BDDFF"
-              placeholder="phone number"
+              placeholder=" number"
               placeholderTextColor="#b2b2b2"
               style={styles.inputField}
+              keyboardType='numeric'
             />
             <TextInput
               onChangeText={handlePasswordChange}

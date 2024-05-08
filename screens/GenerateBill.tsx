@@ -62,10 +62,10 @@ const GenerateBill = ({navigation}:GenerateBillProps) => {
               placeholder="phone number"
               placeholderTextColor="#b2b2b2"
               style={styles.inputField}
+              keyboardType='numeric'
             />
             <TextInput
               onChangeText={handleNameChange}
-              secureTextEntry={true}
               value={name}
               cursorColor="#9BDDFF"
               placeholder="Name"
@@ -161,7 +161,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     color: 'black',
-    
   },
   grid: {
     flexDirection: 'row',

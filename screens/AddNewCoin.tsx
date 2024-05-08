@@ -22,6 +22,9 @@ import {
     const [expiryDate, setExpiryDate] = useState('');
     const [vendorID, setVendorID] = useState('');
     const [quantity, setQuantity] = useState('');
+
+    
+  // save this data on data based
     const [data, setData] = useState({});
   
     const handleAmountChange = (text: string) => {
