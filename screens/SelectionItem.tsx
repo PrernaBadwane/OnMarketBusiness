@@ -25,26 +25,30 @@ const DATA: Product[] = [
   { id: '8', product: 'Product 8', price: 80 },
 ];
 
+interface ItemProps {
+  item: Product;
+  onPress: (product: Product) => void;
+}
 
 
 
+const Item: React.FC<ItemProps> = ({ item, onPress }) => {
 
-const Item: React.FC<ItemProps> = ({ item, onPress, onRemove }) => {
+
   // custom price input
   const [inputPrice, setInputPrice] = useState('');
-
   const handleInputChange = (text: string) => {
     setInputPrice(text);
   };
 
-  // handle on press event to add item in cart
+// handle on onpess event to add item in cart
   const handlePress = () => {
     if (item.price > 0) {
       onPress(item);
     }
   };
 
-  // handle on press event to add item in cart if price of product is not predefined
+  //  handle on onpess event to add item in cart if price of product is not predefined
   const handleAddToCart = () => {
     const price = parseFloat(inputPrice);
     if (!isNaN(price) && price > 0) {
@@ -52,11 +56,6 @@ const Item: React.FC<ItemProps> = ({ item, onPress, onRemove }) => {
       onPress(productWithPrice);
       setInputPrice('');
     }
-  };
-
-  // handle remove item from cart
-  const handleRemoveFromCart = () => {
-    onRemove(item.id); // Using the id property as the unique identifier
   };
 
   return (
@@ -67,6 +66,7 @@ const Item: React.FC<ItemProps> = ({ item, onPress, onRemove }) => {
       ) : (
         <View style={styles.inputContainer}>
           <TextInput
+            
             cursorColor="#9BDDFF"
             placeholder="price"
             placeholderTextColor="#b2b2b2"
@@ -79,17 +79,12 @@ const Item: React.FC<ItemProps> = ({ item, onPress, onRemove }) => {
           </TouchableOpacity>
         </View>
       )}
-      {/* <TouchableOpacity onPress={handleRemoveFromCart}>
-        <Text style={{ color: 'red' }}>Remove</Text>
-      </TouchableOpacity> */}
     </TouchableOpacity>
   );
 };
 
 
-
-
-//remove function have bug
+// ################################################################  REMOVE FUNCTION HAS BUS AS (need uniqur id for each)
 
 const SelectionItem: React.FC = () => {
   const [cart, setCart] = useState<Product[]>([]);
