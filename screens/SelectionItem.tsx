@@ -5,7 +5,14 @@ interface Product {
   id: string;
   product: string;
   price: number;
+
 }
+interface ItemProps {
+  item: Product;
+  onPress: (product: Product) => void;
+  onRemove: (productId: string) => void; // Assuming productId is a string
+}
+
 
 const DATA: Product[] = [
   { id: '1', product: 'Product 1', price: 0 },
@@ -18,30 +25,26 @@ const DATA: Product[] = [
   { id: '8', product: 'Product 8', price: 80 },
 ];
 
-interface ItemProps {
-  item: Product;
-  onPress: (product: Product) => void;
-}
 
 
 
-const Item: React.FC<ItemProps> = ({ item, onPress }) => {
 
-
+const Item: React.FC<ItemProps> = ({ item, onPress, onRemove }) => {
   // custom price input
   const [inputPrice, setInputPrice] = useState('');
+
   const handleInputChange = (text: string) => {
     setInputPrice(text);
   };
 
-// handle on onpess event to add item in cart
+  // handle on press event to add item in cart
   const handlePress = () => {
     if (item.price > 0) {
       onPress(item);
     }
   };
 
-  //  handle on onpess event to add item in cart if price of product is not predefined
+  // handle on press event to add item in cart if price of product is not predefined
   const handleAddToCart = () => {
     const price = parseFloat(inputPrice);
     if (!isNaN(price) && price > 0) {
@@ -49,6 +52,11 @@ const Item: React.FC<ItemProps> = ({ item, onPress }) => {
       onPress(productWithPrice);
       setInputPrice('');
     }
+  };
+
+  // handle remove item from cart
+  const handleRemoveFromCart = () => {
+    onRemove(item.id); // Using the id property as the unique identifier
   };
 
   return (
@@ -59,7 +67,6 @@ const Item: React.FC<ItemProps> = ({ item, onPress }) => {
       ) : (
         <View style={styles.inputContainer}>
           <TextInput
-            
             cursorColor="#9BDDFF"
             placeholder="price"
             placeholderTextColor="#b2b2b2"
@@ -72,35 +79,44 @@ const Item: React.FC<ItemProps> = ({ item, onPress }) => {
           </TouchableOpacity>
         </View>
       )}
+      {/* <TouchableOpacity onPress={handleRemoveFromCart}>
+        <Text style={{ color: 'red' }}>Remove</Text>
+      </TouchableOpacity> */}
     </TouchableOpacity>
   );
 };
 
 
-// ############checkbox function remaining
+
+
+//remove function have bug
 
 const SelectionItem: React.FC = () => {
   const [cart, setCart] = useState<Product[]>([]);
-  const [toBuy, setToBuy] = useState<Product[]>([]);
   const [payableAmount, setPayableAmount] = useState('');
-    const [totalAmount, setTotalAmount] = useState(0);
-    const handlePayableChange = (text: string) => {
-        const cleanedPhoneNumber = text.replace(/[^0-9]/g, '');
-        setPayableAmount(cleanedPhoneNumber);
-      };
+  const [totalAmount, setTotalAmount] = useState(0);
 
-      useEffect(() => {
-        // Calculate total amount whenever cart changes
-        const newTotalAmount = cart.reduce((acc, cur) => acc + cur.price, 0);
-        setTotalAmount(newTotalAmount);
-      }, [cart]);
-   
+  // Function to remove an item from the cart by ID
+  const removeItemFromCart = (productId: string) => {
+    const updatedCart = cart.filter(item => item.id !== productId);
+    setCart(updatedCart);
+  };
+
+  // Calculate total amount whenever cart changes
+  useEffect(() => {
+    const newTotalAmount = cart.reduce((acc, cur) => acc + cur.price, 0);
+    setTotalAmount(newTotalAmount);
+  }, [cart]);
+
+  // Render item function
   const renderItem: ({ item }: { item: Product }) => JSX.Element = ({ item }) => (
     <Item
       item={item}
       onPress={(product) => {
-        // this card value will get added to data base as they are in card at the moment
         setCart([...cart, product]);
+      }}
+      onRemove={(productId) => {
+        removeItemFromCart(productId);
       }}
     />
   );
@@ -119,30 +135,32 @@ const SelectionItem: React.FC = () => {
         data={cart}
         renderItem={({ item }) => (
           <View style={styles.cartItem}>
-            <Text style={{color: 'black'}}>{item.product}</Text>
-            <Text style={{color: 'black'}}>{item.price}</Text>
+            <Text style={{ color: 'black' }}>{item.product}</Text>
+            <Text style={{ color: 'black' }}>{item.price}</Text>
+            <TouchableOpacity onPress={() => removeItemFromCart(item.id)}>
+              <Text style={{ color: 'red' }}>Remove</Text>
+            </TouchableOpacity>
           </View>
         )}
         keyExtractor={item => item.id}
       />
-       <View>
-            <View style={styles.amountBlock}>
-              <Text style={styles.amount}>Total Amount:</Text>
-              <Text style={[styles.amount, {width: '40%'}]}>{totalAmount}</Text>
-            </View>
-            <View style={styles.amountBlock}>
-              <Text style={styles.amount}>Pay Amount:{}</Text>
-              <TextInput
-                onChangeText={handlePayableChange}
-                value={payableAmount}
-                cursorColor="#9BDDFF"
-                placeholder="Amount to pay"
-                placeholderTextColor="#b2b2b2"
-                style={styles.inputField}
-              />
-            </View>
-          </View>
-         
+      <View>
+        <View style={styles.amountBlock}>
+          <Text style={styles.amount}>Total Amount:</Text>
+          <Text style={[styles.amount, { width: '40%' }]}>{totalAmount}</Text>
+        </View>
+        <View style={styles.amountBlock}>
+          <Text style={styles.amount}>Pay Amount:{}</Text>
+          <TextInput
+            onChangeText={setPayableAmount}
+            value={payableAmount}
+            cursorColor="#9BDDFF"
+            placeholder="Amount"
+            placeholderTextColor="#b2b2b2"
+            style={styles.inputField}
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
