@@ -13,9 +13,14 @@ import {
   import React, {useState} from 'react';
   const previous = require('../images/back.png');
 
-
+  import { NativeStackScreenProps } from '@react-navigation/native-stack';
+  import { RootStackPramList } from '../App';
   
-  const AddNewCoin = () => {
+  type AddCoinProps=NativeStackScreenProps<RootStackPramList>
+  
+  
+  
+  const AddNewCoin = ({navigation}:AddCoinProps) => {
     const screenHeight = Dimensions.get('window').height;
     const [amount, setAmount] = useState('');
     const [discription, setDiscription] = useState('');
@@ -48,7 +53,9 @@ import {
       setQuantity(text);
     };
   
-    
+   const back=()=>{
+    navigation.navigate("Billing")
+   }  
   
     const handleSubmit = () => {
       // Check if phone number is valid (e.g., 10 digits for a basic example)
@@ -59,9 +66,9 @@ import {
       <SafeAreaView style={{height: screenHeight}}>
         <View style={styles.container}>
       
-          <View style={styles.imgDiv}>
+          <TouchableOpacity onPress={back} style={styles.imgDiv}>
             <Image style={styles.img} source={previous} />
-            </View>
+            </TouchableOpacity>
         
           
           <View style={styles.input}>
@@ -170,12 +177,16 @@ import {
       margin: 4,
     },
     imgDiv:{
-      height:30,
-      width:30,
-      borderRadius:20/2,
-      backgroundColor:"#0202020"
+      height:35,
+      width:35,
+      borderRadius:20,
+      backgroundColor:"#F0F0F0",
+      paddingHorizontal:11,
+      paddingVertical:10,
+      
     
     },
+    
     img:{
       height:15,
       width:15

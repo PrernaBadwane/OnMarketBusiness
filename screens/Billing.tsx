@@ -1,20 +1,38 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet ,View,TouchableOpacity,Text} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Text,
+  Image,
+} from 'react-native';
 import SelectItem from './SelectionItem';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackPramList } from '../App';
-type BillingProps=NativeStackScreenProps<RootStackPramList>
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackPramList} from '../App';
+const previous = require('../images/back.png');
+type BillingProps = NativeStackScreenProps<RootStackPramList>;
 
-const Billing= ({navigation}:BillingProps) => {
+const Billing = ({navigation}: BillingProps) => {
+  const back = () => {
+    navigation.navigate('Dashboard');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
+      <TouchableOpacity onPress={back} style={styles.imgDiv}>
+        <Image style={styles.img} source={previous} />
+      </TouchableOpacity>
       <ScrollView>
         <SelectItem />
         <View>
-            <TouchableOpacity onPress={()=>navigation.navigate("GenerateBill")} style={styles.button}>
-              <Text style={styles.buttonText}>Next</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('GenerateBill')}
+            style={styles.button}>
+            <Text style={styles.buttonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -31,19 +49,31 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#1e90ff',
-    height: 42,
     elevation: 4,
     marginTop: 16,
+    padding:12,
     marginHorizontal: 4,
-    borderRadius: 42 / 2,
-    padding: 3,
+    borderRadius: 64 / 2,
+    height:60,
   },
   buttonText: {
-    color: '#2b0b0b',
-    fontSize: 18,
+    color: 'white',
+    fontSize: 24,
     fontWeight: 'bold', // make the text bold
     alignSelf: 'center',
     textAlignVertical: 'center',
     margin: 4,
+  },
+  imgDiv: {
+    height: 35,
+    width: 35,
+    borderRadius: 20,
+    backgroundColor: '#F0F0F0',
+    paddingHorizontal: 11,
+    paddingVertical: 10,
+  },
+  img: {
+    height: 15,
+    width: 15,
   },
 });

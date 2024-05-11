@@ -17,6 +17,7 @@ import Cards from './Cards';
 const add =require('../images/add.png');
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackPramList } from '../App';
+const previous = require('../images/back.png');
 type GenerateBillProps=NativeStackScreenProps<RootStackPramList>
 
 
@@ -43,17 +44,21 @@ const GenerateBill = ({navigation}:GenerateBillProps) => {
       Alert.alert('Error', 'Please enter a valid phone number.');
     }
   };
+  const back=()=>{
+    navigation.navigate("Billing")
+   }  
+  
 
   
 
   return (
     <SafeAreaView style={{height: screenHeight}}>
       <View style={styles.div}>
-      {/* <View style={styles.imgDiv}>
+      <TouchableOpacity onPress={back} style={styles.imgDiv}>
             <Image style={styles.img} source={previous} />
-            </View> */}
+            </TouchableOpacity>
         
-        <View>
+        <View style={styles.mainDiv}>
           <View>
             <TextInput
               onChangeText={handlePhoneChange}
@@ -98,7 +103,7 @@ export default GenerateBill;
 
 const styles = StyleSheet.create({
   div: {
-    paddingTop: '10%',
+    paddingTop: '5%',
     paddingHorizontal: 20,
     backgroundColor: '#F9F9F9',
     flex: 1,
@@ -135,10 +140,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   imgDiv:{
-    height:30,
-    width:30,
-    borderRadius:20/2,
-    backgroundColor:"#0202020"
+    height:35,
+    width:35,
+    borderRadius:20,
+    backgroundColor:"#F0F0F0",
+    paddingHorizontal:11,
+    paddingVertical:10,
+    
   
   },
   img:{
@@ -151,6 +159,10 @@ const styles = StyleSheet.create({
     
     
   },
+  mainDiv:{
+    padding:15,
+  }
+  ,
   addBtn:{
     backgroundColor: '#E5E5E5',
     borderRadius: 8,

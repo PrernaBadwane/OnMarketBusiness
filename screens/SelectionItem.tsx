@@ -1,11 +1,19 @@
-import React, { useState,useEffect } from 'react';
-import { SafeAreaView, FlatList, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  SafeAreaView,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 
 interface Product {
   id: string;
   product: string;
   price: number;
-
 }
 interface ItemProps {
   item: Product;
@@ -13,35 +21,37 @@ interface ItemProps {
   onRemove: (productId: string) => void; // Assuming productId is a string
 }
 
-
 const DATA: Product[] = [
-  { id: '1', product: 'Product 1', price: 0 },
-  { id: '2', product: 'Product 2', price: 20 },
-  { id: '3', product: 'Product 3', price: 30 },
-  { id: '4', product: 'Product 4', price: 40 },
-  { id: '5', product: 'Product 5', price: 50 },
-  { id: '6', product: 'Product 6', price: 0 },
-  { id: '7', product: 'Product 7', price: 0 },
-  { id: '8', product: 'Product 8', price: 80 },
+  {id: '1', product: 'Product 166666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666', price: 0},
+  {id: '2', product: 'Product 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222', price: 20},
+  {id: '3', product: 'Product 3', price: 30},
+  {id: '4', product: 'Product 4', price: 40},
+  {id: '5', product: 'Product 5', price: 50},
+  {id: '6', product: 'Product 6', price: 0},
+  {id: '7', product: 'Product 7', price: 0},
+  {id: '8', product: 'Product 8', price: 80},
+  {id: '1', product: 'Product 1', price: 0},
+  {id: '2', product: 'Product 2', price: 20},
+  {id: '1', product: 'Product 1', price: 0},
+  {id: '2', product: 'Product 2', price: 20},
+
 ];
+
+
 
 interface ItemProps {
   item: Product;
   onPress: (product: Product) => void;
 }
 
-
-
-const Item: React.FC<ItemProps> = ({ item, onPress }) => {
-
-
+const Item: React.FC<ItemProps> = ({item, onPress}) => {
   // custom price input
   const [inputPrice, setInputPrice] = useState('');
   const handleInputChange = (text: string) => {
     setInputPrice(text);
   };
 
-// handle on onpess event to add item in cart
+  // handle on onpess event to add item in cart
   const handlePress = () => {
     if (item.price > 0) {
       onPress(item);
@@ -52,7 +62,7 @@ const Item: React.FC<ItemProps> = ({ item, onPress }) => {
   const handleAddToCart = () => {
     const price = parseFloat(inputPrice);
     if (!isNaN(price) && price > 0) {
-      const productWithPrice: Product = { ...item, price };
+      const productWithPrice: Product = {...item, price};
       onPress(productWithPrice);
       setInputPrice('');
     }
@@ -60,29 +70,30 @@ const Item: React.FC<ItemProps> = ({ item, onPress }) => {
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.item}>
-      <Text style={styles.title}>{item.product}</Text>
+      <ScrollView >
+            <Text style={{color: 'black', width:'100%', marginVertical:4}}>{item.product}</Text>
+            </ScrollView>
       {item.price > 0 ? (
         <Text style={styles.price}>{item.price}</Text>
-      ) : (
-        <View style={styles.inputContainer}>
-          <TextInput
-            
-            cursorColor="#9BDDFF"
-            placeholder="price"
-            placeholderTextColor="#b2b2b2"
-            style={styles.inputField2}
-            value={inputPrice}
-            onChangeText={handleInputChange}
-          />
-          <TouchableOpacity onPress={handleAddToCart} style={styles.addButton}>
-            <Text style={styles.addButtonText}>Add</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      ) : // <View style={styles.inputContainer}>
+      //   <TextInput
+
+      //     cursorColor="#9BDDFF"
+      //     placeholder="price"
+      //     placeholderTextColor="#b2b2b2"
+      //     style={styles.inputField2}
+      //     value={inputPrice}
+      //     onChangeText={handleInputChange}
+      //     keyboardType='numeric'
+      //   />
+      //   <TouchableOpacity onPress={handleAddToCart} style={styles.addButton}>
+      //     <Text style={styles.addButtonText}>Add</Text>
+      //   </TouchableOpacity>
+      // </View>
+      null}
     </TouchableOpacity>
   );
 };
-
 
 // ################################################################  REMOVE FUNCTION HAS BUS AS (need uniqur id for each)
 
@@ -104,13 +115,13 @@ const SelectionItem: React.FC = () => {
   }, [cart]);
 
   // Render item function
-  const renderItem: ({ item }: { item: Product }) => JSX.Element = ({ item }) => (
+  const renderItem: ({item}: {item: Product}) => JSX.Element = ({item}) => (
     <Item
       item={item}
-      onPress={(product) => {
+      onPress={product => {
         setCart([...cart, product]);
       }}
-      onRemove={(productId) => {
+      onRemove={productId => {
         removeItemFromCart(productId);
       }}
     />
@@ -122,39 +133,47 @@ const SelectionItem: React.FC = () => {
         data={DATA}
         renderItem={renderItem}
         keyExtractor={item => item.id}
-        numColumns={2}
+        numColumns={3}
         columnWrapperStyle={styles.columnWrapper}
       />
-      <Text style={styles.cartTitle}>Cart:</Text>
+
       <FlatList
         data={cart}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <View style={styles.cartItem}>
-            <Text style={{ color: 'black' }}>{item.product}</Text>
-            <Text style={{ color: 'black' }}>{item.price}</Text>
-            <TouchableOpacity onPress={() => removeItemFromCart(item.id)}>
-              <Text style={{ color: 'red' }}>Remove</Text>
-            </TouchableOpacity>
+            <ScrollView horizontal={true}>
+            <Text style={{color: 'black', width:'100%', marginVertical:4}}>{item.product}</Text>
+            </ScrollView>
+            <View style={styles.itemProperty}>
+              <Text style={{color: 'black'}}>{item.price}</Text>
+              <TouchableOpacity onPress={() => removeItemFromCart(item.id)}>
+                <Text style={{color: 'red'}}>Remove</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
         keyExtractor={item => item.id}
       />
       <View>
-        <View style={styles.amountBlock}>
-          <Text style={styles.amount}>Total Amount:</Text>
-          <Text style={[styles.amount, { width: '40%' }]}>{totalAmount}</Text>
-        </View>
-        <View style={styles.amountBlock}>
-          <Text style={styles.amount}>Pay Amount:{}</Text>
-          <TextInput
-            onChangeText={setPayableAmount}
-            value={payableAmount}
-            cursorColor="#9BDDFF"
-            placeholder="Amount"
-            placeholderTextColor="#b2b2b2"
-            style={styles.inputField}
-          />
-        </View>
+        {totalAmount > 0 ? (
+          <View>
+            <View style={styles.amountBlock}>
+              <Text style={styles.amount}>Total Amount:</Text>
+              <Text style={[styles.amount, {width: '40%'}]}>{totalAmount}</Text>
+            </View>
+            <View style={styles.amountBlock}>
+              <Text style={styles.amount}>Pay Amount:{}</Text>
+              <TextInput
+                onChangeText={setPayableAmount}
+                value={payableAmount}
+                cursorColor="#9BDDFF"
+                placeholder="Amount"
+                placeholderTextColor="#b2b2b2"
+                style={styles.inputField}
+              />
+            </View>
+          </View>
+        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -164,25 +183,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
+    padding: 5,
   },
   item: {
     backgroundColor: 'white',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 8,
-    flex: 1,
+    padding: 15,
     borderRadius: 10,
     elevation: 4,
+    width: '30%',
+    aspectRatio: 1,
+    marginVertical: 8,
+    marginHorizontal: 4,
   },
   title: {
-    fontSize: 20,
+    fontSize: 15,
     color: 'black',
   },
   price: {
     fontSize: 16,
     marginTop: 5,
     color: 'green',
+    width: 30,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -202,8 +224,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 8,
     paddingHorizontal: 10,
-    margin:2,
-    height:35
+    margin: 2,
+    height: 35,
   },
   addButtonText: {
     color: 'white',
@@ -218,14 +240,18 @@ const styles = StyleSheet.create({
   },
   cartItem: {
     backgroundColor: '#ffffff',
-      elevation: 4,
-      margin: 4,
-      borderRadius: 4,
-      flex: 1,
-      flexDirection: 'row',
-      height: 40,
-      padding: 10,
-      justifyContent: 'space-between',
+    elevation: 4,
+    margin: 4,
+    borderRadius: 4,
+    flexDirection: 'row',
+    padding: 10,
+    alignItems: 'center', // Align items vertically in the container
+    justifyContent: 'space-between', // Add this line to distribute items evenly
+  },
+  itemProperty: {
+    flexDirection: 'row',
+    gap: 8,
+    marginHorizontal:10
   },
   amountBlock: {
     flex: 1,
@@ -268,18 +294,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
-  inputField2: {
-    backgroundColor: 'white',
-    elevation: 4,
-    marginVertical: 4,
-    marginHorizontal: 2,
-    borderRadius: 8,
-    color: 'black',
-    width: '60%',
-    padding:0,
-    height :35,
-    paddingHorizontal:10
-  },
+
 });
 
 export default SelectionItem;

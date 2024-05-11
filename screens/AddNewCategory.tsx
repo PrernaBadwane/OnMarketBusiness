@@ -12,9 +12,13 @@ import {
 import React, {useState} from 'react';
 const previous = require('../images/back.png');
 
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+  import { RootStackPramList } from '../App';
+  
+  type AddCoinProps=NativeStackScreenProps<RootStackPramList>
+  
 
-
-const AddNewCategory = () => {
+const AddNewCategory = ({navigation}:AddCoinProps) => {
   const screenHeight = Dimensions.get('window').height;
   const [category, setCategory] = useState('');
 
@@ -47,7 +51,10 @@ const AddNewCategory = () => {
     
     setGST(text);
   };
-
+  const back=()=>{
+    navigation.navigate("Dashboard")
+   }  
+  
   
 
   const handleSubmit = () => {
@@ -58,9 +65,10 @@ const AddNewCategory = () => {
   return (
     <SafeAreaView style={{height: screenHeight}}>
       <View style={styles.container}>
-      <View style={styles.imgDiv}>
+      <TouchableOpacity onPress={back} style={styles.imgDiv}>
             <Image style={styles.img} source={previous} />
-            </View>
+            </TouchableOpacity>
+     
         
         
         <View style={styles.input}>
@@ -166,11 +174,15 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     margin: 4,
   },
+  
   imgDiv:{
-    height:30,
-    width:30,
-    borderRadius:20/2,
-    backgroundColor:"#0202020"
+    height:35,
+    width:35,
+    borderRadius:20,
+    backgroundColor:"#F0F0F0",
+    paddingHorizontal:11,
+    paddingVertical:10,
+    
   
   },
   img:{

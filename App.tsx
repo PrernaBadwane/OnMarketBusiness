@@ -31,35 +31,35 @@ const App = () => {
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{headerShown: true}}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="Dashboard"
           component={Dashboard}
-          options={{headerShown: true}}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="Billing"
           component={Billing}
-          options={{headerShown: true}}
+          options={{headerShown: false}}
         />
 
         <Stack.Screen
           name="AddNewCategory"
           component={AddNewCategory}
-          options={{headerShown: true}}
+          options={{headerShown: false}}
         />
 
         <Stack.Screen
           name="AddNewCoin"
           component={AddNewCoin}
-          options={{headerShown: true}}
+          options={{headerShown: false}}
         />
 
         <Stack.Screen
           name="GenerateBill"
           component={GenerateBill}
-          options={{headerShown: true}}
+          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>
