@@ -72,7 +72,7 @@ const Dashboard = ({ navigation }:DashboardProps) => {
           <View style={styles.head}>
             <View style={{ justifyContent: 'flex-end' }}>
               <Text style={{ color: 'black' }}>{vendorName}</Text>
-              <Text style={{ color: 'black' }}>Total Visits: {visit}</Text>
+              {/* <Text style={{ color: 'black' }}>Total Visits: {visit}</Text> */}
             </View>
             <View style={styles.imageDiv}>
               <Image

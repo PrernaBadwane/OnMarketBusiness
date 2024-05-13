@@ -132,5 +132,6 @@ const styles = StyleSheet.create({
   imgDiv: {
     margin: 80,
     flex: 1,
+    alignItems:"center"
   },
 });

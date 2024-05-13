@@ -102,7 +102,8 @@ const Orders: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
     <ScrollView >
-      <Text style={styles.heading}>Orders</Text>
+      {pendingOrders.length>0 &&(<View>
+        <Text style={styles.heading}>Orders</Text>
       <FlatList
         data={pendingOrders}
         renderItem={({ item }) => (
@@ -115,12 +116,15 @@ const Orders: React.FC = () => {
         keyExtractor={(item) => item.orderId}
         numColumns={1}
       />
+      </View>)}
+      
       {dispatchedProducts.length > 0 && (
           <View>
             <Text style={styles.heading}>Dispatched & Delivered</Text>
             <FlatList
               data={dispatchedProducts}
-              renderItem={({ item }) => <Products orderedProduct={item} />}
+              renderItem={({ item }) => <Products orderedProduct={item} 
+              />}
               keyExtractor={(item) => item.orderId}
               numColumns={1}
             />
