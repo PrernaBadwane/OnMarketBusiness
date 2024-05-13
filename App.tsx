@@ -12,7 +12,7 @@ import Billing from './screens/Billing';
 import AddNewCoin from './screens/AddNewCoin';
 import AddNewCategory from './screens/AddNewCategory';
 import GenerateBill from './screens/GenerateBill';
-import Oreders from './screens/Oreders';
+import Orders from './screens/Orders';
 import Products from './screens/Products';
 
 const Stack = createNativeStackNavigator<RootStackPramList>();
@@ -67,7 +67,7 @@ const App = () => {
         />
         <Stack.Screen
           name="Orders"
-          component={Oreders}
+          component={Orders}
           options={{headerShown: false}}
         />
         <Stack.Screen
