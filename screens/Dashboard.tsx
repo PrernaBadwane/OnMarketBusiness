@@ -14,7 +14,8 @@ import {RootStackPramList} from '../App';
 
 type DashboardProps = NativeStackScreenProps<RootStackPramList>;
 
-const Dashboard: React.FC<DashboardProps> = ({ navigation }) => {
+
+const Dashboard = ({ navigation }:DashboardProps) => {
   const vendorName: string = 'vendor';
   const visit: number = 0;
 
@@ -27,12 +28,12 @@ const Dashboard: React.FC<DashboardProps> = ({ navigation }) => {
     {
       id: '2',
       name: 'View Products',
-      onPress: () => navigation.navigate('Dashboard'),
+      onPress: () => navigation.navigate('Products'),
     },
     {
       id: '3',
       name: 'Order',
-      onPress: () => navigation.navigate('Dashboard'),
+      onPress: () => navigation.navigate('Orders'),
     },
     {
       id: '4',
