@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,9 +7,8 @@ import {
   ScrollView,
   FlatList,
   Image,
-  Button,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface Product {
   id: string;
@@ -18,9 +17,6 @@ interface Product {
   productsDetails: string;
   productImage: string;
   catogry: string;
-}
-interface catogry{
-
 }
 
 const DATA: Product[] = [
@@ -44,53 +40,54 @@ const DATA: Product[] = [
   },
   {
     id: '3',
-    product: 'product2',
+    product: 'product3',
     price: 90,
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
-    catogry: '1',
+    catogry: '2',
   },
   {
     id: '4',
-    product: 'product2',
+    product: 'product4',
     price: 80,
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
-    catogry: '1',
+    catogry: '2',
   },
   {
     id: '5',
-    product: 'product2',
+    product: 'product5',
     price: 90,
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
-    catogry: '1',
+    catogry: '3',
   },
   {
     id: '6',
-    product: 'product2',
+    product: 'product6',
     price: 90,
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
-    catogry: '1',
+    catogry: '3',
   },
   {
     id: '7',
-    product: 'product2',
+    product: 'product7',
     price: 90,
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
-    catogry: '1',
+    catogry: '3',
   },
 ];
 
 const Products = () => {
   const [products, setProducts] = useState(DATA);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const deleteProduct = (id: string) => {
     setProducts(prevProducts =>
@@ -98,9 +95,15 @@ const Products = () => {
     );
   };
 
-  const renderItem = ({item}: {item: Product}) => (
+  const categories = Array.from(new Set(products.map(p => p.catogry)));
+
+  const filteredProducts = selectedCategory
+    ? products.filter(p => p.catogry === selectedCategory)
+    : products;
+
+  const renderItem = ({ item }: { item: Product }) => (
     <View style={styles.item}>
-      <Image source={{uri: item.productImage}} style={styles.image} />
+      <Image source={{ uri: item.productImage }} style={styles.image} />
       <Text style={styles.productDetails}>{item.product}</Text>
       <Text style={styles.productDetails}>
         Price: {'\u20B9'}
@@ -116,21 +119,54 @@ const Products = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <ScrollView horizontal={true}></ScrollView>
-      </View>
+      <ScrollView>
+      <ScrollView horizontal style={styles.categoryContainer}>
+        {categories.map(category => (
+          <TouchableOpacity
+            key={category}
+            style={[
+              styles.categoryButton,
+              selectedCategory === category && styles.selectedCategoryButton,
+            ]}
+            onPress={() => setSelectedCategory(category)}>
+            <Text
+              style={[
+                styles.categoryButtonText,
+                selectedCategory === category && styles.selectedCategoryButtonText,
+              ]}>
+              Category {category}
+            </Text>
+          </TouchableOpacity>
+        ))}
+        <TouchableOpacity
+          style={[
+            styles.categoryButton,
+            selectedCategory === null && styles.selectedCategoryButton,
+          ]}
+          onPress={() => setSelectedCategory(null)}>
+          <Text
+            style={[
+              styles.categoryButtonText,
+              selectedCategory === null && styles.selectedCategoryButtonText,
+            ]}>
+            All
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
 
       <ScrollView>
         <View>
           <Text style={styles.heading}>All Products</Text>
         </View>
         <FlatList
-          data={products}
+          data={filteredProducts}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           numColumns={2}
         />
       </ScrollView>
+      </ScrollView>
+     
     </SafeAreaView>
   );
 };
@@ -161,7 +197,6 @@ const styles = StyleSheet.create({
     paddingVertical: '20%',
     backgroundColor: '#F9F9F9',
   },
-
   heading: {
     color: 'black',
     fontSize: 30,
@@ -185,5 +220,29 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  categoryContainer: {
+    flexDirection: 'row',
+    marginVertical: 10,
+  },
+  categoryButton: {
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginHorizontal: 5,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  selectedCategoryButton: {
+    backgroundColor: '#1e90ff',
+    borderColor: '#1e90ff',
+  },
+  categoryButtonText: {
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  selectedCategoryButtonText: {
+    color: '#fff',
   },
 });
