@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, FlatList, StyleSheet, Text, TouchableOpacity, View, TextInput, ScrollView } from 'react-native';
+import {
+  SafeAreaView,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 
 interface Product {
   id: string;
@@ -11,61 +20,33 @@ interface ItemProps {
   item: Product;
   onPress: (product: Product) => void;
 }
+
 const DATA: Product[] = [
-  {id: '1', product: 'Product 166666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666', price: 0},
-  {id: '2', product: 'Product 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222', price: 20},
-  {id: '3', product: 'Product 3', price: 30},
-  {id: '4', product: 'Product 4', price: 40},
-  {id: '5', product: 'Product 5', price: 50},
-  {id: '6', product: 'Product 6', price: 0},
-  {id: '7', product: 'Product 7', price: 0},
-  {id: '8', product: 'Product 8', price: 80},
-  {id: '1', product: 'Product 1', price: 0},
-  {id: '2', product: 'Product 2', price: 20},
-  {id: '1', product: 'Product 1', price: 0},
-  {id: '2', product: 'Product 2', price: 20},
-  {id: '1', product: 'Product 166666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666', price: 0},
-  {id: '2', product: 'Product 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222', price: 20},
-  {id: '3', product: 'Product 3', price: 30},
-]
+  { id: '1', product: 'Product 1', price: 0 },
+  { id: '2', product: 'Product 2', price: 20 },
+  { id: '3', product: 'Product 3', price: 30 },
+  { id: '4', product: 'Product 4', price: 40 },
+  { id: '5', product: 'Product 5', price: 50 },
+  { id: '6', product: 'Product 6', price: 0 },
+  { id: '7', product: 'Product 7', price: 0 },
+  { id: '8', product: 'Product 8', price: 80 },
+];
 
 const Item: React.FC<ItemProps> = ({ item, onPress }) => {
-  // State for custom price input
-  const [inputPrice, setInputPrice] = useState('');
-
-  // Function to handle changes in the price input
-  const handleInputChange = (text: string) => {
-    setInputPrice(text);
-  };
-
-  // Function to handle pressing the item
   const handlePress = () => {
-    if (item.price > 0) {
-      onPress(item);
-    }
-  };
-
-  // Function to handle adding item to cart with custom price
-  const handleAddToCart = () => {
-    const price = parseFloat(inputPrice);
-    if (!isNaN(price) && price > 0) {
-      const productWithPrice: Product = { ...item, price };
-      onPress(productWithPrice);
-      setInputPrice('');
-    }
+    onPress(item);
   };
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.item}>
       <ScrollView>
-        <Text style={{ color: 'black', width: '100%', marginVertical: 4 }}>{item.product}</Text>
+        <Text style={{ color: 'black', width: '100%', marginVertical: 4 }}>
+          {item.product}
+        </Text>
       </ScrollView>
       {item.price > 0 ? (
         <Text style={styles.price}>{item.price}/-</Text>
-      ) : (
-        
-        null
-      )}
+      ) : null}
     </TouchableOpacity>
   );
 };
@@ -73,61 +54,86 @@ const Item: React.FC<ItemProps> = ({ item, onPress }) => {
 const SelectionItem: React.FC = () => {
   const [cart, setCart] = useState<Product[]>([]);
   const [totalAmount, setTotalAmount] = useState(0);
-  const [payAmount, setPayAmount]=useState();
+  const [payAmount, setPayAmount] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [inputPrice, setInputPrice] = useState('');
 
-  // Function to remove an item from the cart by ID
   const removeItemFromCart = (productId: string) => {
-    const updatedCart = cart.filter(item => item.id !== productId);
+    const updatedCart = cart.filter((item) => item.id !== productId);
     setCart(updatedCart);
   };
 
-  // Calculate total amount whenever cart changes
   useEffect(() => {
     const newTotalAmount = cart.reduce((acc, cur) => acc + cur.price, 0);
     setTotalAmount(newTotalAmount);
   }, [cart]);
 
-  // Function to handle pressing the item in the list
   const handlePressItem = (product: Product) => {
-    setCart([...cart, product]);
+    if (product.price === 0) {
+      setSelectedProduct(product);
+    } else {
+      setCart((prevCart) => [...prevCart, product]);
+    }
+  };
+
+  const handleAddToCart = () => {
+    if (selectedProduct) {
+      const price = parseFloat(inputPrice);
+      if (!isNaN(price) && price > 0) {
+        const productWithPrice: Product = { ...selectedProduct, price };
+        setCart((prevCart) => [...prevCart, productWithPrice]);
+        setInputPrice('');
+        setSelectedProduct(null);
+      }
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
       <FlatList
         data={DATA}
-        renderItem={({ item }) => (
-          <Item
-            item={item}
-            onPress={handlePressItem}
-          />
-        )}
-        keyExtractor={item => item.id}
+        renderItem={({ item }) => <Item item={item} onPress={handlePressItem} />}
+        keyExtractor={(item) => item.id + item.product}
         numColumns={3}
       />
-    </View>
-    
-      {/* Display the cart */}
+      <View style={styles.marginDiv}>
+      {selectedProduct && (
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.inputField}
+            value={inputPrice}
+            onChangeText={setInputPrice}
+            placeholder="Enter price"
+            placeholderTextColor="#b2b2b2"
+            keyboardType="numeric"
+          />
+          <TouchableOpacity style={styles.button} onPress={handleAddToCart}>
+            <Text style={styles.buttonText}>Add</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      </View>
+      <View style={styles.marginDiv}>
       <FlatList
         data={cart}
         renderItem={({ item }) => (
           <View style={styles.cartItem}>
-            <ScrollView horizontal={true}>
-              <Text style={{ color: 'black', width: '100%', marginVertical: 4 }}>{item.product}</Text>
+            <ScrollView horizontal>
+              <Text style={{ color: 'black', width: '100%', marginVertical: 4 }}>
+                {item.product}
+              </Text>
             </ScrollView>
             <View style={styles.itemProperty}>
-              <Text style={{ color: 'black', marginHorizontal:8 }}>{item.price}/-</Text>
+              <Text style={{ color: 'black', marginHorizontal: 8 }}>{item.price}/-</Text>
               <TouchableOpacity onPress={() => removeItemFromCart(item.id)}>
                 <Text style={{ color: 'red' }}>Remove</Text>
               </TouchableOpacity>
             </View>
           </View>
         )}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id + item.product}
       />
-
-      {/* Display total amount and payable amount */}
+      </View>
       {totalAmount > 0 && (
         <View>
           <View style={styles.amountBlock}>
@@ -138,11 +144,12 @@ const SelectionItem: React.FC = () => {
             <Text style={styles.amount}>Pay Amount:</Text>
             <TextInput
               value={payAmount}
+              onChangeText={(text) => setPayAmount(text)}
               cursorColor="#9BDDFF"
               placeholder="Amount"
               placeholderTextColor="#b2b2b2"
               style={styles.inputField}
-              keyboardType='numeric'
+              keyboardType="numeric"
             />
           </View>
         </View>
@@ -181,34 +188,38 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 5,
+    alignSelf:'center',
+    margin: 10,
+    padding:20
   },
-  input: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 8,
-    marginRight: 5,
+  
+  button: {
+    backgroundColor: '#1e90ff',
+    elevation: 4,
+    padding:12,
+    marginHorizontal: 4,
+    borderRadius: 64 / 2,
+    height:50,
   },
-  addButton: {
-    backgroundColor: 'blue',
-    borderRadius: 5,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    margin: 2,
-    height: 35,
-  },
-  addButtonText: {
+  buttonText: {
     color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold', // make the text bold
+    alignSelf: 'center',
+    textAlignVertical: 'center',
+    margin: 4,
   },
-  columnWrapper: {
-    justifyContent: 'space-between',
+
+  marginDiv:{
+marginVertical:10
+  },
+  cartTitleContainer: {
+    marginTop: 20,
+    marginBottom: 10,
   },
   cartTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 20,
   },
   cartItem: {
     backgroundColor: '#ffffff',
@@ -217,8 +228,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     flexDirection: 'row',
     padding: 10,
-    alignItems: 'center', // Align items vertically in the container
-    justifyContent: 'space-between', // Add this line to distribute items evenly
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   itemProperty: {
     flexDirection: 'row',
@@ -226,33 +237,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   amountBlock: {
-    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     height: 60,
+    paddingHorizontal: 15,
   },
   amount: {
     color: 'black',
-    padding: 15,
     fontSize: 18,
     fontWeight: '600',
-  },
-  button: {
-    backgroundColor: '#1e90ff',
-    height: 42,
-    elevation: 4,
-    marginTop: 16,
-    marginHorizontal: 4,
-    borderRadius: 42 / 2,
-    padding: 3,
-  },
-  buttonText: {
-    color: '#2b0b0b',
-    fontSize: 18,
-    fontWeight: 'bold', // make the text bold
-    alignSelf: 'center',
-    textAlignVertical: 'center',
-    margin: 4,
   },
   inputField: {
     backgroundColor: 'white',
@@ -262,26 +255,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     color: 'black',
     paddingHorizontal: 20,
-    width: '40%',
+    width: '50%',
     fontSize: 18,
     fontWeight: '600',
   },
-  pagination: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginVertical: 10,
-  },
-  pageIndicator: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: 'gray',
-    marginHorizontal: 5,
-  },
-  activePageIndicator: {
-    backgroundColor: 'blue',
-  },
 });
-
 
 export default SelectionItem;
