@@ -11,7 +11,6 @@ import {
   Image,
 } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackPramList } from '../App';
 
@@ -53,7 +52,7 @@ const Login= ({navigation}:LoginProps) => {
               onChangeText={handlePhoneChange}
               value={phoneNumber}
               cursorColor="#9BDDFF"
-              placeholder=" number"
+              placeholder="Phone Number"
               placeholderTextColor="#b2b2b2"
               style={styles.inputField}
               keyboardType='numeric'

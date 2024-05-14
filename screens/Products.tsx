@@ -39,7 +39,7 @@ const DATA: Product[] = [
   {
     id: '4',
     product: 'product2',
-    price: 90,
+    price: 80,
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',

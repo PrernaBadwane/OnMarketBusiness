@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 interface Product {
   orderId: string;
@@ -25,8 +25,8 @@ interface Product {
 
 interface OrderProps {
   orderedProduct: Product;
-  onPress: (product: Product) => void;
-  onDispatch: (product: Product) => void;
+  onPress?: (product: Product) => void;
+  onDispatch?: (product: Product) => void;
 }
 
 const Orders: React.FC = () => {
@@ -92,7 +92,9 @@ const Orders: React.FC = () => {
 
   const handlePressItem = (product: Product) => {
     setDispatchedProducts([...dispatchedProducts, product]);
-    setPendingOrders(pendingOrders.filter((order) => order.orderId !== product.orderId));
+    setPendingOrders(
+      pendingOrders.filter(order => order.orderId !== product.orderId),
+    );
   };
 
   const handleDispatch = (product: Product) => {
@@ -101,31 +103,32 @@ const Orders: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-    <ScrollView >
-      {pendingOrders.length>0 &&(<View>
-        <Text style={styles.heading}>Orders</Text>
-      <FlatList
-        data={pendingOrders}
-        renderItem={({ item }) => (
-          <Products
-            orderedProduct={item}
-            onPress={handlePressItem}
-            onDispatch={handleDispatch}
-          />
+      <ScrollView>
+        {pendingOrders.length > 0 && (
+          <View>
+            <Text style={styles.heading}>Orders</Text>
+            <FlatList
+              data={pendingOrders}
+              renderItem={({item}) => (
+                <Products
+                  orderedProduct={item}
+                  onPress={handlePressItem}
+                  onDispatch={handleDispatch}
+                />
+              )}
+              keyExtractor={item => item.orderId}
+              numColumns={1}
+            />
+          </View>
         )}
-        keyExtractor={(item) => item.orderId}
-        numColumns={1}
-      />
-      </View>)}
-      
-      {dispatchedProducts.length > 0 && (
+
+        {dispatchedProducts.length > 0 && (
           <View>
             <Text style={styles.heading}>Dispatched & Delivered</Text>
             <FlatList
               data={dispatchedProducts}
-              renderItem={({ item }) => <Products orderedProduct={item} 
-              />}
-              keyExtractor={(item) => item.orderId}
+              renderItem={({item}) => <Products orderedProduct={item} />}
+              keyExtractor={item => item.orderId}
               numColumns={1}
             />
           </View>
@@ -137,11 +140,15 @@ const Orders: React.FC = () => {
 
 const Products: React.FC<OrderProps> = ({ orderedProduct, onPress, onDispatch }) => {
   const handlePress = () => {
-    onPress(orderedProduct);
+    if (onPress) {
+      onPress(orderedProduct);
+    }
   };
 
   const handleDispatchClick = () => {
-    onDispatch(orderedProduct);
+    if (onDispatch) {
+      onDispatch(orderedProduct);
+    }
   };
 
   return (
@@ -151,19 +158,20 @@ const Products: React.FC<OrderProps> = ({ orderedProduct, onPress, onDispatch })
           <Image
             style={styles.img}
             source={{
-              uri:
-                'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+              uri: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
             }}
           />
         </View>
         <View style={styles.detailsDiv}>
           <View style={styles.colDivMain}>
-            <View style={{ justifyContent: 'flex-end' }}>
+            <View style={{justifyContent: 'flex-end'}}>
               <Text style={styles.productName}>{orderedProduct.product}</Text>
             </View>
 
             {!onDispatch ? null : (
-              <TouchableOpacity style={styles.button} onPress={handleDispatchClick}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleDispatchClick}>
                 <Text style={styles.buttonText}>Dispatch</Text>
               </TouchableOpacity>
             )}
@@ -183,20 +191,28 @@ const Products: React.FC<OrderProps> = ({ orderedProduct, onPress, onDispatch })
             </View>
             <View style={styles.colDiv}>
               <Text style={styles.productDetails}>Qty:</Text>
-              <Text style={styles.productDetailsValue}>{orderedProduct.quantity}</Text>
+              <Text style={styles.productDetailsValue}>
+                {orderedProduct.quantity}
+              </Text>
             </View>
           </View>
           <View style={styles.colDiv}>
             <Text style={styles.productDetails}>Order ID:</Text>
-            <Text style={styles.productDetailsValue}>{orderedProduct.orderId}</Text>
+            <Text style={styles.productDetailsValue}>
+              {orderedProduct.orderId}
+            </Text>
           </View>
           <View style={styles.colDiv}>
             <Text style={styles.productDetails}>Consumer Id:</Text>
-            <Text style={styles.productDetailsValue}>{orderedProduct.consumerId}</Text>
+            <Text style={styles.productDetailsValue}>
+              {orderedProduct.consumerId}
+            </Text>
           </View>
           <View style={styles.colDiv}>
             <Text style={styles.productDetails}>Delivery Type:</Text>
-            <Text style={styles.productDetailsValue}>{orderedProduct.deliveryType}</Text>
+            <Text style={styles.productDetailsValue}>
+              {orderedProduct.deliveryType}
+            </Text>
           </View>
 
           <View style={styles.colDiv}>
@@ -234,7 +250,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     elevation: 4,
     borderRadius: 8,
-    marginVertical:10,
+    marginVertical: 10,
     paddingEnd: 10,
     width: '100%',
   },
