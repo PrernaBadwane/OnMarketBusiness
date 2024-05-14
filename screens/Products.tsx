@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Image, Button } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace';
+import React, {useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+  Image,
+  Button,
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 interface Product {
   id: string;
@@ -9,6 +17,10 @@ interface Product {
   price: number;
   productsDetails: string;
   productImage: string;
+  catogry: string;
+}
+interface catogry{
+
 }
 
 const DATA: Product[] = [
@@ -19,6 +31,7 @@ const DATA: Product[] = [
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    catogry: '1',
   },
   {
     id: '2',
@@ -27,6 +40,7 @@ const DATA: Product[] = [
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    catogry: '1',
   },
   {
     id: '3',
@@ -35,6 +49,7 @@ const DATA: Product[] = [
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    catogry: '1',
   },
   {
     id: '4',
@@ -43,6 +58,7 @@ const DATA: Product[] = [
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    catogry: '1',
   },
   {
     id: '5',
@@ -51,6 +67,7 @@ const DATA: Product[] = [
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    catogry: '1',
   },
   {
     id: '6',
@@ -59,6 +76,7 @@ const DATA: Product[] = [
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    catogry: '1',
   },
   {
     id: '7',
@@ -67,45 +85,53 @@ const DATA: Product[] = [
     productsDetails: 'hh',
     productImage:
       'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    catogry: '1',
   },
-  
 ];
 
 const Products = () => {
   const [products, setProducts] = useState(DATA);
 
   const deleteProduct = (id: string) => {
-    setProducts(prevProducts => prevProducts.filter(product => product.id !== id));
+    setProducts(prevProducts =>
+      prevProducts.filter(product => product.id !== id),
+    );
   };
 
-  const renderItem = ({ item }: { item: Product }) => (
+  const renderItem = ({item}: {item: Product}) => (
     <View style={styles.item}>
-      <Image source={{ uri: item.productImage }} style={styles.image} />
+      <Image source={{uri: item.productImage}} style={styles.image} />
       <Text style={styles.productDetails}>{item.product}</Text>
-      <Text style={styles.productDetails}>Price: {'\u20B9'}{item.price}</Text>
-      <Button title="Delete" onPress={() => deleteProduct(item.id)} />
+      <Text style={styles.productDetails}>
+        Price: {'\u20B9'}
+        {item.price}
+      </Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => deleteProduct(item.id)}>
+        <Text style={styles.buttonText}>Delete</Text>
+      </TouchableOpacity>
     </View>
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
       <View>
-        <Text style={styles.heading}>All Products</Text>
+        <ScrollView horizontal={true}></ScrollView>
       </View>
-           <FlatList
-      data={products}
-      renderItem={renderItem}
-      keyExtractor={item => item.id}
-      numColumns={2}
-      
-    />
 
+      <ScrollView>
+        <View>
+          <Text style={styles.heading}>All Products</Text>
+        </View>
+        <FlatList
+          data={products}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          numColumns={2}
+        />
       </ScrollView>
-      
-      
     </SafeAreaView>
-    
   );
 };
 
@@ -116,30 +142,26 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     alignItems: 'center',
-    backgroundColor:"white",
-    elevation:4,
-    width:"45%",
-    margin:10,
-    borderRadius:8,
-    paddingBottom:10
+    backgroundColor: 'white',
+    elevation: 4,
+    width: '45%',
+    margin: 10,
+    borderRadius: 8,
+    paddingBottom: 10,
   },
   image: {
-    width: "100%",
-    height:200,
+    width: '100%',
+    height: 200,
     marginBottom: 10,
-    borderTopRightRadius:8,
-    borderTopLeftRadius:8,
-
-    
+    borderTopRightRadius: 8,
+    borderTopLeftRadius: 8,
   },
   container: {
     flex: 1,
-    paddingVertical: "20%",
+    paddingVertical: '20%',
     backgroundColor: '#F9F9F9',
-   
-
   },
- 
+
   heading: {
     color: 'black',
     fontSize: 30,
@@ -151,5 +173,17 @@ const styles = StyleSheet.create({
   productDetails: {
     color: 'gray',
     marginVertical: 4,
+  },
+  button: {
+    backgroundColor: '#ff6347',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
