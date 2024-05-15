@@ -19,14 +19,45 @@ interface Product {
   catogry: string;
 }
 
+interface Category {
+  category: string;
+  categoryImage: string;
+}
+
+const categories: Category[] = [
+  {
+    category: '1',
+    categoryImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+  },
+  {
+    category: '2',
+    categoryImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+  },
+  {
+    category: '3',
+    categoryImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+  },
+  {
+    category: '4',
+    categoryImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+  },
+  {
+    category: '5',
+    categoryImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+  },
+  {
+    category: '6',
+    categoryImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+  },
+];
+
 const DATA: Product[] = [
   {
     id: '1',
     product: 'product1',
     price: 90,
     productsDetails: 'hh',
-    productImage:
-      'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    productImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
     catogry: '1',
   },
   {
@@ -34,8 +65,7 @@ const DATA: Product[] = [
     product: 'product2',
     price: 90,
     productsDetails: 'hh',
-    productImage:
-      'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    productImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
     catogry: '1',
   },
   {
@@ -43,8 +73,7 @@ const DATA: Product[] = [
     product: 'product3',
     price: 90,
     productsDetails: 'hh',
-    productImage:
-      'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    productImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
     catogry: '2',
   },
   {
@@ -52,8 +81,7 @@ const DATA: Product[] = [
     product: 'product4',
     price: 80,
     productsDetails: 'hh',
-    productImage:
-      'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    productImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
     catogry: '2',
   },
   {
@@ -61,8 +89,7 @@ const DATA: Product[] = [
     product: 'product5',
     price: 90,
     productsDetails: 'hh',
-    productImage:
-      'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    productImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
     catogry: '3',
   },
   {
@@ -70,8 +97,7 @@ const DATA: Product[] = [
     product: 'product6',
     price: 90,
     productsDetails: 'hh',
-    productImage:
-      'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    productImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
     catogry: '3',
   },
   {
@@ -79,8 +105,7 @@ const DATA: Product[] = [
     product: 'product7',
     price: 90,
     productsDetails: 'hh',
-    productImage:
-      'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
+    productImage: 'https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg',
     catogry: '3',
   },
 ];
@@ -90,12 +115,8 @@ const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const deleteProduct = (id: string) => {
-    setProducts(prevProducts =>
-      prevProducts.filter(product => product.id !== id),
-    );
+    setProducts(prevProducts => prevProducts.filter(product => product.id !== id));
   };
-
-  const categories = Array.from(new Set(products.map(p => p.catogry)));
 
   const filteredProducts = selectedCategory
     ? products.filter(p => p.catogry === selectedCategory)
@@ -106,8 +127,7 @@ const Products = () => {
       <Image source={{ uri: item.productImage }} style={styles.image} />
       <Text style={styles.productDetails}>{item.product}</Text>
       <Text style={styles.productDetails}>
-        Price: {'\u20B9'}
-        {item.price}
+        Price: {'\u20B9'}{item.price}
       </Text>
       <TouchableOpacity
         style={styles.button}
@@ -119,42 +139,35 @@ const Products = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-      <ScrollView horizontal style={styles.categoryContainer}>
-        {categories.map(category => (
+      
+        <ScrollView horizontal style={styles.categoryContainer}>
           <TouchableOpacity
-            key={category}
-            style={[
-              styles.categoryButton,
-              selectedCategory === category && styles.selectedCategoryButton,
-            ]}
-            onPress={() => setSelectedCategory(category)}>
-            <Text
-              style={[
-                styles.categoryButtonText,
-                selectedCategory === category && styles.selectedCategoryButtonText,
-              ]}>
-              Category {category}
-            </Text>
+            style={styles.categoryButton}
+            onPress={() => setSelectedCategory(null)}>
+            <View style={[styles.imageBackground, selectedCategory === null && styles.selectedImageBackground]}>
+              <Image
+                source={{ uri: "https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg" }}
+                style={[styles.categoryImage, selectedCategory === null && styles.selectedCategoryButton]}
+              />
+            </View>
+            <Text style={styles.categoryButtonText}>All</Text>
           </TouchableOpacity>
-        ))}
-        <TouchableOpacity
-          style={[
-            styles.categoryButton,
-            selectedCategory === null && styles.selectedCategoryButton,
-          ]}
-          onPress={() => setSelectedCategory(null)}>
-          <Text
-            style={[
-              styles.categoryButtonText,
-              selectedCategory === null && styles.selectedCategoryButtonText,
-            ]}>
-            All
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
-
-      <ScrollView>
+          {categories.map(category => (
+            <TouchableOpacity
+              key={category.category}
+              style={styles.categoryButton}
+              onPress={() => setSelectedCategory(category.category)}>
+              <View style={[styles.imageBackground, selectedCategory === category.category && styles.selectedImageBackground]}>
+                <Image
+                  source={{ uri: category.categoryImage }}
+                  style={[styles.categoryImage, selectedCategory === category.category && styles.selectedCategoryButton]}
+                />
+              </View>
+              <Text style={styles.categoryButtonText}>{category.category}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+        <ScrollView>
         <View>
           <Text style={styles.heading}>All Products</Text>
         </View>
@@ -165,8 +178,6 @@ const Products = () => {
           numColumns={2}
         />
       </ScrollView>
-      </ScrollView>
-     
     </SafeAreaView>
   );
 };
@@ -226,23 +237,50 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   categoryButton: {
-    backgroundColor: '#fff',
+    alignItems: 'center',
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     marginHorizontal: 5,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    borderRadius: 50,
   },
   selectedCategoryButton: {
-    backgroundColor: '#1e90ff',
-    borderColor: '#1e90ff',
+    backgroundColor: '#FFFFFF',
+    padding: 8,
+    borderRadius: 40,
+    borderWidth: 4,
+    borderColor: 'gray',
+    width: 65,
+    height: 65,
+  },
+  selectedImageBackground: {
+    backgroundColor: '#FFFFFF',
+    padding: 0,
+    borderRadius: 40,
+    borderWidth: 0.5,
+    borderColor: "white",
+    width: 65,
+    height: 65,
+    elevation: 16,
+  },
+  imageBackground: {
+    backgroundColor: '#FFFFFF',
+    padding: 2,
+    borderRadius: 40,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    width: 65,
+    height: 65,
+  },
+  categoryImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 0.5,
+    borderColor: 'gray',
   },
   categoryButtonText: {
+    marginVertical: 8,
     color: '#000',
     fontWeight: 'bold',
-  },
-  selectedCategoryButtonText: {
-    color: '#fff',
   },
 });
