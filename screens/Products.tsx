@@ -168,6 +168,7 @@ const Products = () => {
       </ScrollView>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
+        <View>
           <Text style={styles.heading}>All Products</Text>
         </View>
         <FlatList
@@ -177,6 +178,8 @@ const Products = () => {
           numColumns={2}
           showsVerticalScrollIndicator={false}
         />
+        </View>
+        
       </ScrollView>
     </SafeAreaView>
   );
@@ -190,6 +193,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     backgroundColor: 'white',
     alignItems:"center",
+    alignSelf:"flex-start",
     elevation: 4,
     width: '45%',
     margin: 10,
