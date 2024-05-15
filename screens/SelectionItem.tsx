@@ -53,6 +53,7 @@ const Item: React.FC<ItemProps> = ({ item, onPress }) => {
 
 const SelectionItem: React.FC = () => {
   const [cart, setCart] = useState<Product[]>([]);
+  
   const [totalAmount, setTotalAmount] = useState(0);
   const [payAmount, setPayAmount] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -73,6 +74,8 @@ const SelectionItem: React.FC = () => {
       setSelectedProduct(product);
     } else {
       setCart((prevCart) => [...prevCart, product]);
+  
+
     }
   };
 
@@ -115,7 +118,7 @@ const SelectionItem: React.FC = () => {
       </View>
       <View style={styles.marginDiv}>
       <FlatList
-        data={cart}
+        data={cart.slice().reverse()}
         renderItem={({ item }) => (
           <View style={styles.cartItem}>
             <ScrollView horizontal>

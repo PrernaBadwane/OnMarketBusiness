@@ -49,6 +49,7 @@ const Cards = () => {
   const [selectedCoin, setSelectedCoin] = useState<number | null>(null);
   const maxRenderState = Math.ceil(coinlist.length / 8);
   const SWIPE_THRESHOLD = 10;
+
   const onSwipeRight = () => {
     if (renderState > 1) {
       setRenderState(prevState => prevState - 1);
@@ -60,7 +61,6 @@ const Cards = () => {
   const onSwipeLeft = () => {
     if (renderState < maxRenderState) {
       setRenderState((prevState) => prevState + 1);
-      console.log(renderState - 1);
     } else {
       setRenderState(maxRenderState);
     }
@@ -75,18 +75,12 @@ const Cards = () => {
       onPanResponderRelease: (evt, gestureState) => {
         const {dx} = gestureState;
         if (Math.abs(dx) > SWIPE_THRESHOLD) {
-          console.log(dx);
           if (dx > 0) {
-            // Corrected condition
-            console.log('working right');
             onSwipeRight();
           } else if (dx < 0) {
             if (renderState < maxRenderState) {
-              console.log(renderState);
               onSwipeLeft();
-              console.log('working left');
             } else {
-              // If at max render state, trigger a re-render with the same state
               setRenderState(renderState);
             }
           }
@@ -101,7 +95,8 @@ const Cards = () => {
     }
     const startIndex = (renderState - 1) * 8;
     const endIndex = renderState * 8;
-    const visibleCoins = coinlist.slice(startIndex, endIndex);
+    const reversedCoins = [...coinlist].reverse(); // Reverse the coinlist array
+    const visibleCoins = reversedCoins.slice(startIndex, endIndex);
 
     return visibleCoins.map(({id, value}) => (
       <TouchableOpacity
@@ -124,7 +119,7 @@ const Cards = () => {
     <SafeAreaView>
       <View
         style={styles.gridContainer}
-        {...panResponder.panHandlers} // This line ensures ScrollView captures touch events
+        {...panResponder.panHandlers}
       >
         <View style={styles.grid}>{renderCoins()}</View>
         <View style={styles.grid}>
@@ -148,7 +143,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     height: 250,
-    paddingVertical:40
+    paddingVertical: 40
   },
   grid: {
     flexDirection: 'row',
@@ -192,7 +187,8 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     backgroundColor: 'gray',
-    margin: 5,borderWidth: 1, // Border width
+    margin: 5,
+    borderWidth: 1, // Border width
     borderColor: '#1e90ff', // Flashy border color
   },
   activeDot: {
@@ -206,5 +202,4 @@ const styles = StyleSheet.create({
     shadowColor: '#1f93ff', // Change shadow color to match the elevation color
     elevation: 8, // Adjust elevation as needed
   }
-  
 });

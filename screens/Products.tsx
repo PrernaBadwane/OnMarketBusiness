@@ -139,35 +139,34 @@ const Products = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      
-        <ScrollView horizontal style={styles.categoryContainer}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryContainer}>
+        <TouchableOpacity
+          style={styles.categoryButton}
+          onPress={() => setSelectedCategory(null)}>
+          <View style={[styles.imageBackground, selectedCategory === null && styles.selectedImageBackground]}>
+            <Image
+              source={{ uri: "https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg" }}
+              style={[styles.categoryImage, selectedCategory === null && styles.selectedCategoryButton]}
+            />
+          </View>
+          <Text style={styles.categoryButtonText}>All</Text>
+        </TouchableOpacity>
+        {categories.map(category => (
           <TouchableOpacity
+            key={category.category}
             style={styles.categoryButton}
-            onPress={() => setSelectedCategory(null)}>
-            <View style={[styles.imageBackground, selectedCategory === null && styles.selectedImageBackground]}>
+            onPress={() => setSelectedCategory(category.category)}>
+            <View style={[styles.imageBackground, selectedCategory === category.category && styles.selectedImageBackground]}>
               <Image
-                source={{ uri: "https://www.shutterstock.com/image-photo/lalbagh-fort-aurangabad-incomplete-mughal-600nw-719918413.jpg" }}
-                style={[styles.categoryImage, selectedCategory === null && styles.selectedCategoryButton]}
+                source={{ uri: category.categoryImage }}
+                style={[styles.categoryImage, selectedCategory === category.category && styles.selectedCategoryButton]}
               />
             </View>
-            <Text style={styles.categoryButtonText}>All</Text>
+            <Text style={styles.categoryButtonText}>{category.category}</Text>
           </TouchableOpacity>
-          {categories.map(category => (
-            <TouchableOpacity
-              key={category.category}
-              style={styles.categoryButton}
-              onPress={() => setSelectedCategory(category.category)}>
-              <View style={[styles.imageBackground, selectedCategory === category.category && styles.selectedImageBackground]}>
-                <Image
-                  source={{ uri: category.categoryImage }}
-                  style={[styles.categoryImage, selectedCategory === category.category && styles.selectedCategoryButton]}
-                />
-              </View>
-              <Text style={styles.categoryButtonText}>{category.category}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-        <ScrollView>
+        ))}
+      </ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           <Text style={styles.heading}>All Products</Text>
         </View>
@@ -176,6 +175,7 @@ const Products = () => {
           renderItem={renderItem}
           keyExtractor={item => item.id}
           numColumns={2}
+          showsVerticalScrollIndicator={false}
         />
       </ScrollView>
     </SafeAreaView>
@@ -188,8 +188,8 @@ const styles = StyleSheet.create({
   item: {
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    alignItems: 'center',
     backgroundColor: 'white',
+    alignItems:"center",
     elevation: 4,
     width: '45%',
     margin: 10,
@@ -282,5 +282,6 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     color: '#000',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
