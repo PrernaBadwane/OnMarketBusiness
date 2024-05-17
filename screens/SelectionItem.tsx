@@ -57,7 +57,7 @@ const Item: React.FC<
           {item.product}
         </Text>
       </ScrollView>
-      {item.price > 0 ? <Text style={styles.price}>{item.price}/-</Text> : null}
+      {item.price > 0 ? <Text style={styles.price}>{'\u20B9'}{item.price}/-</Text> : null}
     </TouchableOpacity>
   );
 };
@@ -159,7 +159,7 @@ const SelectionItem: React.FC = () => {
               </ScrollView>
               <View style={styles.itemProperty}>
                 <Text style={{color: 'black', marginHorizontal: 8}}>
-                  {item.price}/-
+                  {"\u20B9"}{item.price}/-
                 </Text>
                 <TouchableOpacity onPress={() => removeItemFromCart(item.id)}>
                   <Text style={{color: 'red'}}>Remove</Text>
@@ -174,7 +174,7 @@ const SelectionItem: React.FC = () => {
         <View>
           <View style={styles.amountBlock}>
             <Text style={styles.amount}>Total Amount:</Text>
-            <Text style={[styles.amount, {width: '40%'}]}>{totalAmount}/-</Text>
+            <Text style={[styles.amount, {width: '40%'}]}>{'\u20B9'}{totalAmount}/-</Text>
           </View>
           <View style={styles.amountBlock}>
             <Text style={styles.amount}>Pay Amount:</Text>
@@ -221,7 +221,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 5,
     color: 'green',
-    width: 30,
   },
   inputContainer: {
     flexDirection: 'row',

@@ -14,20 +14,17 @@ import {
   NativeScrollEvent,
 } from 'react-native';
 import Cards from './Cards';
-const add =require('../images/add.png');
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackPramList } from '../App';
+const add = require('../images/add.png');
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackPramList} from '../App';
 const previous = require('../images/back.png');
-type GenerateBillProps=NativeStackScreenProps<RootStackPramList>
+type GenerateBillProps = NativeStackScreenProps<RootStackPramList>;
 
-
-
-
-const GenerateBill = ({navigation}:GenerateBillProps) => {
+const GenerateBill = ({navigation}: GenerateBillProps) => {
   const screenHeight = Dimensions.get('window').height;
   const [phoneNumber, setPhoneNumber] = useState('');
   const [name, setName] = useState('');
-  
+
   const handlePhoneChange = (text: string) => {
     const cleanedPhoneNumber = text.replace(/[^0-9]/g, '');
     setPhoneNumber(cleanedPhoneNumber);
@@ -44,20 +41,17 @@ const GenerateBill = ({navigation}:GenerateBillProps) => {
       Alert.alert('Error', 'Please enter a valid phone number.');
     }
   };
-  const back=()=>{
-    navigation.navigate("Billing")
-   }  
-  
-
-  
+  const back = () => {
+    navigation.navigate('Billing');
+  };
 
   return (
     <SafeAreaView style={{height: screenHeight}}>
       <View style={styles.div}>
-      <TouchableOpacity onPress={back} style={styles.imgDiv}>
-            <Image style={styles.img} source={previous} />
-            </TouchableOpacity>
-        
+        <TouchableOpacity onPress={back} style={styles.imgDiv}>
+          <Image style={styles.img} source={previous} />
+        </TouchableOpacity>
+
         <View style={styles.mainDiv}>
           <View>
             <TextInput
@@ -67,7 +61,7 @@ const GenerateBill = ({navigation}:GenerateBillProps) => {
               placeholder="phone number"
               placeholderTextColor="#b2b2b2"
               style={styles.inputField}
-              keyboardType='numeric'
+              keyboardType="numeric"
             />
             <TextInput
               onChangeText={handleNameChange}
@@ -79,12 +73,16 @@ const GenerateBill = ({navigation}:GenerateBillProps) => {
             />
           </View>
           <SafeAreaView>
-            <Cards/>
-            <TouchableOpacity onPress={()=>{navigation.navigate("AddNewCoin")}} style={styles.addBtn}>
-    <Image style={[styles.grid, styles.add]} source={add} />
-    </TouchableOpacity>
+            <Cards />
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('AddNewCoin');
+              }}
+              style={styles.addBtn}>
+              <Image style={[styles.grid, styles.add]} source={add} />
+            </TouchableOpacity>
           </SafeAreaView>
-          
+
           <View style={styles.btnDiv}>
             <TouchableOpacity onPress={handleSubmit} style={styles.button}>
               <Text style={styles.buttonText}>WhatsApp</Text>
@@ -117,7 +115,7 @@ const styles = StyleSheet.create({
     color: 'black',
     paddingHorizontal: 10,
   },
-  
+
   btnDiv: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -139,31 +137,26 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  imgDiv:{
-    height:35,
-    width:35,
-    borderRadius:20,
-    backgroundColor:"#F0F0F0",
-    paddingHorizontal:11,
-    paddingVertical:10,
-    
-  
+  imgDiv: {
+    height: 35,
+    width: 35,
+    borderRadius: 20,
+    backgroundColor: '#F0F0F0',
+    paddingHorizontal: 11,
+    paddingVertical: 10,
   },
-  img:{
-    height:15,
-    width:15
+  img: {
+    height: 15,
+    width: 15,
   },
-  add:{
-    height:20,
-    width:20,
-    
-    
+  add: {
+    height: 20,
+    width: 20,
   },
-  mainDiv:{
-    padding:15,
-  }
-  ,
-  addBtn:{
+  mainDiv: {
+    padding: 15,
+  },
+  addBtn: {
     backgroundColor: '#E5E5E5',
     borderRadius: 8,
     padding: 10,
@@ -179,5 +172,4 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'center',
   },
- 
 });
