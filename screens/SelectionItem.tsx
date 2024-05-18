@@ -53,11 +53,14 @@ const Item: React.FC<
         )}
       </View>
       <ScrollView>
-        <Text style={{color: 'black', width: '100%'}}>
-          {item.product}
-        </Text>
+        <Text style={{color: 'black', width: '100%'}}>{item.product}</Text>
       </ScrollView>
-      {item.price > 0 ? <Text style={styles.price}>{'\u20B9'}{item.price}/-</Text> : null}
+      {item.price > 0 ? (
+        <Text style={styles.price}>
+          {'\u20B9'}
+          {item.price}/-
+        </Text>
+      ) : null}
     </TouchableOpacity>
   );
 };
@@ -116,7 +119,6 @@ const SelectionItem: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      
       <FlatList
         data={DATA}
         renderItem={({item}) => (
@@ -159,7 +161,8 @@ const SelectionItem: React.FC = () => {
               </ScrollView>
               <View style={styles.itemProperty}>
                 <Text style={{color: 'black', marginHorizontal: 8}}>
-                  {"\u20B9"}{item.price}/-
+                  {'\u20B9'}
+                  {item.price}/-
                 </Text>
                 <TouchableOpacity onPress={() => removeItemFromCart(item.id)}>
                   <Text style={{color: 'red'}}>Remove</Text>
@@ -174,7 +177,10 @@ const SelectionItem: React.FC = () => {
         <View>
           <View style={styles.amountBlock}>
             <Text style={styles.amount}>Total Amount:</Text>
-            <Text style={[styles.amount, {width: '40%'}]}>{'\u20B9'}{totalAmount}/-</Text>
+            <Text style={[styles.amount, {width: '40%'}]}>
+              {'\u20B9'}
+              {totalAmount}/-
+            </Text>
           </View>
           <View style={styles.amountBlock}>
             <Text style={styles.amount}>Pay Amount:</Text>
@@ -203,15 +209,15 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: 'white',
-    
+
     borderRadius: 10,
-    padding:15,
+    padding: 15,
     elevation: 4,
     width: '30%',
     aspectRatio: 1,
     marginVertical: 8,
     marginHorizontal: 4,
-    position:"relative"
+    position: 'relative',
   },
   title: {
     fontSize: 15,
@@ -296,17 +302,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
-  numberOfProductc:{
-    backgroundColor:'#1e90ff',
-    elevation:4,
-    width:16,
-    alignItems:"center",
-    alignSelf:"flex-end",
-    borderRadius:8,
-    position:"absolute",
-    top: 4, 
-    right: 4, 
-  }
+  numberOfProductc: {
+    backgroundColor: '#1e90ff',
+    elevation: 4,
+    width: 16,
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    borderRadius: 8,
+    position: 'absolute',
+    top: 4,
+    right: 4,
+  },
 });
 
 export default SelectionItem;
