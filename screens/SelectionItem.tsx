@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   SafeAreaView,
   FlatList,
@@ -8,6 +8,7 @@ import {
   View,
   TextInput,
   ScrollView,
+  PanResponder,
 } from 'react-native';
 
 interface Product {
@@ -29,11 +30,16 @@ const DATA: Product[] = [
   {id: '5', product: 'Product 5', price: 50},
   {id: '6', product: 'Product 6', price: 0},
   {id: '7', product: 'Product 7', price: 0},
-  {id: '9', product: 'Product 8', price: 80},
-  {id: '10', product: 'Product 5', price: 50},
-  {id: '11', product: 'Product 6', price: 0},
-  {id: '12', product: 'Product 7', price: 0},
-  {id: '13', product: 'Product 8', price: 80},
+  {id: '8', product: 'Product 8', price: 80},
+  {id: '9', product: 'Product 9', price: 50},
+  {id: '10', product: 'Product 10', price: 0},
+  {id: '11', product: 'Product 11', price: 0},
+  {id: '12', product: 'Product 12', price: 80},
+  {id: '13', product: 'Product 13', price: 80},
+  {id: '14', product: 'Product 14', price: 50},
+  {id: '15', product: 'Product 15', price: 0},
+  {id: '16', product: 'Product 16', price: 0},
+  {id: '17', product: 'Product 17', price: 80},
 ];
 
 const Item: React.FC<
@@ -74,6 +80,8 @@ const SelectionItem: React.FC = () => {
   const [payAmount, setPayAmount] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [inputPrice, setInputPrice] = useState('');
+  const [renderState, setRenderState] = useState(1);
+  const SWIPE_THRESHOLD = 50;
 
   const removeItemFromCart = (productId: string) => {
     const updatedCart = cart.filter(item => item.id !== productId);
@@ -117,20 +125,68 @@ const SelectionItem: React.FC = () => {
     }
   };
 
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {},
+      onPanResponderRelease: (evt, gestureState) => {
+        const {dx} = gestureState;
+        if (Math.abs(dx) > SWIPE_THRESHOLD) {
+          if (dx > 0) {
+            onSwipeRight();
+          } else {
+            onSwipeLeft();
+          }
+        }
+      },
+    }),
+  ).current;
+
+  const onSwipeRight = () => {
+    if (renderState > 1) {
+      setRenderState(prevState => prevState - 1);
+    } else {
+      setRenderState(1);
+    }
+  };
+
+  const onSwipeLeft = () => {
+    if (renderState < Math.ceil(DATA.length / 12)) {
+      setRenderState(prevState => prevState + 1);
+    } else {
+      setRenderState(Math.ceil(DATA.length / 12));
+    }
+  };
+
+  const renderProducts = () => {
+    if (renderState > Math.ceil(DATA.length / 12)) {
+      setRenderState(Math.ceil(DATA.length / 12));
+    }
+    const startIndex = (renderState - 1) * 12;
+    const endIndex = startIndex + 12;
+    return DATA.slice(startIndex, endIndex).map(item => (
+      <Item
+        key={item.id}
+        item={item}
+        onPress={handlePressItem}
+        productCounts={productCounts}
+      />
+    ));
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={DATA}
-        renderItem={({item}) => (
-          <Item
-            item={item}
-            onPress={handlePressItem}
-            productCounts={productCounts}
-          />
-        )}
-        keyExtractor={item => item.id + item.product}
-        numColumns={3}
-      />
+      <View {...panResponder.panHandlers}>
+        <View style={styles.grid}>{renderProducts()}</View>
+        <View style={styles.pagination}>
+          {[...Array(Math.ceil(DATA.length / 12))].map((_, index) => (
+            <View
+              key={index}
+              style={index === renderState - 1 ? styles.activeDot : styles.dot}
+            />
+          ))}
+        </View>
+      </View>
       <View style={styles.marginDiv}>
         {selectedProduct && (
           <View style={styles.inputContainer}>
@@ -207,9 +263,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     padding: 5,
   },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  pagination: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
   item: {
     backgroundColor: 'white',
-
     borderRadius: 10,
     padding: 15,
     elevation: 4,
@@ -235,7 +301,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 20,
   },
-
   button: {
     backgroundColor: '#1e90ff',
     elevation: 4,
@@ -247,12 +312,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 18,
-    fontWeight: 'bold', // make the text bold
+    fontWeight: 'bold',
     alignSelf: 'center',
     textAlignVertical: 'center',
     margin: 4,
   },
-
   marginDiv: {
     marginVertical: 10,
   },
@@ -312,6 +376,26 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 4,
     right: 4,
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: 'gray',
+    margin: 5,
+    borderWidth: 1,
+    borderColor: '#1e90ff',
+  },
+  activeDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#1e90ff',
+    margin: 5,
+    borderWidth: 1,
+    borderColor: '#1e90ff',
+    shadowColor: '#1f93ff',
+    elevation: 8,
   },
 });
 
