@@ -15,6 +15,7 @@ import GenerateBill from './screens/GenerateBill';
 import Orders from './screens/Orders';
 import Products from './screens/Products';
 import Bill from "./screens/Bill"
+import Coins from "./screens/Coins"
 
 const Stack = createNativeStackNavigator<RootStackPramList>();
 
@@ -28,6 +29,7 @@ export type RootStackPramList = {
   Orders:undefined;
   Products:undefined;
   Bill:undefined;
+  Coins:undefined;
 };
 
 const App = () => {
@@ -80,6 +82,11 @@ const App = () => {
         <Stack.Screen
           name="Bill"
           component={Bill}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Coins"
+          component={Coins}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
