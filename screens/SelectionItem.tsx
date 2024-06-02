@@ -54,7 +54,7 @@ const Item: React.FC<
       <View style={styles.numberOfProductc}>
         {productCounts[item.id] && productCounts[item.id] > 0 && (
           <View>
-            <Text style={{color: 'black'}}>{productCounts[item.id]}</Text>
+            <Text style={{color: 'black' }}>{productCounts[item.id]}</Text>
           </View>
         )}
       </View>

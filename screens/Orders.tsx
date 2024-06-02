@@ -282,6 +282,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: '700',
     fontSize: 18,
+    width:"70%"
   },
   productDetails: {
     color: 'gray',

@@ -112,6 +112,7 @@ const DATA: Product[] = [
 
 const Products = () => {
   const [products, setProducts] = useState(DATA);
+  const [catagory, setcatagory] = useState(categories);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const deleteProduct = (id: string) => {
@@ -151,7 +152,7 @@ const Products = () => {
           </View>
           <Text style={styles.categoryButtonText}>All</Text>
         </TouchableOpacity>
-        {categories.map(category => (
+        {catagory.map(category => (
           <TouchableOpacity
             key={category.category}
             style={styles.categoryButton}

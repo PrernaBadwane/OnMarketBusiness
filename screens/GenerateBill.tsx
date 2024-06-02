@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -9,19 +9,16 @@ import {
   View,
   Dimensions,
   Image,
-  FlatList,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
 } from 'react-native';
 import Cards from './Cards';
 const add = require('../images/add.png');
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackPramList} from '../App';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackPramList } from '../App';
 const previous = require('../images/back.png');
+
 type GenerateBillProps = NativeStackScreenProps<RootStackPramList>;
 
-const GenerateBill = ({navigation}: GenerateBillProps) => {
-  const screenHeight = Dimensions.get('window').height;
+const GenerateBill = ({ navigation }: GenerateBillProps) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [name, setName] = useState('');
 
@@ -37,58 +34,52 @@ const GenerateBill = ({navigation}: GenerateBillProps) => {
   const handleSubmit = () => {
     if (phoneNumber.length === 10) {
       Alert.alert('Success', 'Phone number is valid: ' + phoneNumber);
+      navigation.navigate('Bill');
     } else {
       Alert.alert('Error', 'Please enter a valid phone number.');
     }
   };
+
   const back = () => {
     navigation.navigate('Billing');
   };
 
   return (
-    <SafeAreaView style={{height: screenHeight}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.div}>
-        <TouchableOpacity onPress={back} style={styles.imgDiv}>
-          <Image style={styles.img} source={previous} />
-        </TouchableOpacity>
-
+        <View style={[styles.colDivMain, styles.alignRight]}>
+          <TouchableOpacity onPress={back} style={styles.imgDiv}>
+            <Image style={styles.img} source={previous} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={back} style={[styles.imgDiv, styles.addBtn]}>
+            <Text style={styles.addButtonText}>Add New Coins</Text>
+            <Image style={styles.img} source={add} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.mainDiv}>
-          <View>
-            <TextInput
-              onChangeText={handlePhoneChange}
-              value={phoneNumber}
-              cursorColor="#9BDDFF"
-              placeholder="phone number"
-              placeholderTextColor="#b2b2b2"
-              style={styles.inputField}
-              keyboardType="numeric"
-            />
-            <TextInput
-              onChangeText={handleNameChange}
-              value={name}
-              cursorColor="#9BDDFF"
-              placeholder="Name"
-              placeholderTextColor="#b2b2b2"
-              style={styles.inputField}
-            />
-          </View>
-          <SafeAreaView>
+          <TextInput
+            onChangeText={handlePhoneChange}
+            value={phoneNumber}
+            cursorColor="#9BDDFF"
+            placeholder="Phone Number"
+            placeholderTextColor="#b2b2b2"
+            style={styles.inputField}
+            keyboardType="numeric"
+          />
+          <TextInput
+            onChangeText={handleNameChange}
+            value={name}
+            cursorColor="#9BDDFF"
+            placeholder="Name"
+            placeholderTextColor="#b2b2b2"
+            style={styles.inputField}
+          />
+          <View style={styles.cardsContainer}>
             <Cards />
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('AddNewCoin');
-              }}
-              style={styles.addBtn}>
-              <Image style={[styles.grid, styles.add]} source={add} />
-            </TouchableOpacity>
-          </SafeAreaView>
-
+          </View>
           <View style={styles.btnDiv}>
             <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-              <Text style={styles.buttonText}>WhatsApp</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-              <Text style={styles.buttonText}>Save</Text>
+              <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -108,19 +99,18 @@ const styles = StyleSheet.create({
   },
   inputField: {
     backgroundColor: 'white',
-    elevation: 4,
+    elevation: 4,  
     marginVertical: 8,
-    marginHorizontal: 4,
     borderRadius: 8,
     color: 'black',
     paddingHorizontal: 10,
+    paddingVertical: 12, // Added vertical padding for better appearance
   },
-
   btnDiv: {
+    marginTop:300,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 20,
-    gap: 6,
+    marginVertical: 10,
   },
   button: {
     backgroundColor: '#1e90ff',
@@ -149,27 +139,34 @@ const styles = StyleSheet.create({
     height: 15,
     width: 15,
   },
-  add: {
-    height: 20,
-    width: 20,
-  },
   mainDiv: {
-    padding: 15,
+  
   },
   addBtn: {
-    backgroundColor: '#E5E5E5',
-    borderRadius: 8,
-    padding: 10,
-    margin: 5,
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: 'black',
-  },
-  grid: {
+    flex: 1,
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    color: 'black',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  colDivMain: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  addButtonText: {
+    color: '#2b0b0b',
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginRight: 10, // Added margin to space out text from image
+  },
+  alignRight: {
+    gap: 200, // Reduced gap to a more reasonable amount
+  },
+  cardsContainer: {
+    flex: 1,
     justifyContent: 'center',
+    height:400,
+    backgroundColor:"black"
   },
 });

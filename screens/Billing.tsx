@@ -29,7 +29,7 @@ const Billing = ({navigation}: BillingProps) => {
             <Image style={styles.img} source={previous} />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={back}
+            onPress={() => navigation.navigate('AddNewCategory')}
             style={[styles.imgDiv, styles.addBtn]}>
             <Text style={styles.addButtonText}>Add New Category</Text>
             <Image style={styles.img} source={add} />
