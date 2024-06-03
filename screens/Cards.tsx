@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,7 +14,11 @@ interface Coin {
   validTill: string;
 }
 
-const Cards = () => {
+interface CardsProps {
+  onCoinSelect: (coin: Coin | null) => void;
+}
+
+const Cards: React.FC<CardsProps> = ({ onCoinSelect }) => {
   const coinlist: Coin[] = [
     {id: 1, value: 60, validTill: '2024-12-31'},
     {id: 2, value: 58, validTill: '2024-11-30'},
@@ -57,7 +61,7 @@ const Cards = () => {
       setRenderState(1);
     }
   };
-  
+
   const onSwipeLeft = () => {
     if (renderState < maxRenderState) {
       setRenderState((prevState) => prevState + 1);
@@ -73,7 +77,7 @@ const Cards = () => {
         // You can use gestureState.dx and gestureState.dy to track the movement
       },
       onPanResponderRelease: (evt, gestureState) => {
-        const {dx} = gestureState;
+        const { dx } = gestureState;
         if (Math.abs(dx) > SWIPE_THRESHOLD) {
           if (dx > 0) {
             onSwipeRight();
@@ -98,25 +102,26 @@ const Cards = () => {
     const reversedCoins = [...coinlist].reverse(); // Reverse the coinlist array
     const visibleCoins = reversedCoins.slice(startIndex, endIndex);
 
-    return visibleCoins.map(({id, value, validTill}) => (
+    return visibleCoins.map(({ id, value, validTill }) => (
       <TouchableOpacity
         key={id}
-        onPress={() => toggleCoinSelection(id)}
+        onPress={() => toggleCoinSelection(id, value, validTill)}
         style={[
           styles.coinBlock,
-         // Apply active style if coin is selected
+          // Apply active style if coin is selected
         ]}>
-        <View style={[styles.coins,  selectedCoin === id && styles.activeCoinBlock,]}><Text style={{color:"black"}}>{value}</Text></View>
+        <View style={[styles.coins, selectedCoin === id && styles.activeCoinBlock]}><Text style={{ color: "black" }}>{value}</Text></View>
         <View style={styles.coinValid}>
-        <Text style={styles.validityText}>{validTill}</Text>
+          <Text style={styles.validityText}>{validTill}</Text>
         </View>
-        
       </TouchableOpacity>
     ));
   };
 
-  const toggleCoinSelection = (id: number) => {
-    setSelectedCoin(selectedCoin === id ? null : id);
+  const toggleCoinSelection = (id: number, value: number, validTill: string) => {
+    const coin = selectedCoin === id ? null : { id, value, validTill };
+    setSelectedCoin(coin ? id : null);
+    onCoinSelect(coin);
   };
 
   return (
@@ -154,15 +159,15 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'center',
   },
-  coinValid:{
+  coinValid: {
     backgroundColor: '#E5E5E5',
     padding: 5,
-    borderTopStartRadius : 8,
-    borderBottomEndRadius:8,
-    elevation:4
+    borderTopStartRadius: 8,
+    borderBottomEndRadius: 8,
+    elevation: 4
   },
   coinBlock: {
-    position:"relative",
+    position: "relative",
     margin: 10,
     width: 80, // Increased width
     height: 80, // Increased height
@@ -172,18 +177,18 @@ const styles = StyleSheet.create({
 
   },
   coins: {
-    height:40,
-    width:40, // Increased font size
+    height: 40,
+    width: 40, // Increased font size
     backgroundColor: '#9BDDFF',
-    position:"absolute",
-    bottom:45,
-    padding:5,
-    zIndex:1,
-    borderRadius:40/2,
-    borderColor:"#F9F9F9",
-    borderWidth:3,
-    alignItems:"center",
-    justifyContent:"center"
+    position: "absolute",
+    bottom: 45,
+    padding: 5,
+    zIndex: 1,
+    borderRadius: 40 / 2,
+    borderColor: "#F9F9F9",
+    borderWidth: 3,
+    alignItems: "center",
+    justifyContent: "center"
 
   },
   validityText: {
@@ -192,7 +197,13 @@ const styles = StyleSheet.create({
     marginTop: 5, // Space between coin value and date
   },
   activeCoinBlock: {
-   borderColor:"gray"
+    borderColor: "gray",
+    shadowColor: "#9BDDFF",
+    elevation: 15,
+    borderWidth: 3,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
   },
   add: {
     height: 20,
@@ -203,20 +214,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     margin: 8,
-    width: 80,
-    height: 80,
     justifyContent: 'center',
     alignItems: 'center',
-    color: 'black',
   },
   dot: {
-    width: 10,
     height: 10,
+    width: 10,
     borderRadius: 5,
     backgroundColor: 'gray',
-    margin: 5,
-    borderWidth: 1, // Border width
-    borderColor: '#1e90ff', // Flashy border color
+    marginHorizontal: 5,
   },
   activeDot: {
     width: 10,
@@ -230,3 +236,4 @@ const styles = StyleSheet.create({
     elevation: 8, // Adjust elevation as needed
   }
 });
+

@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   Image,
 } from 'react-native';
 import Cards from './Cards';
@@ -17,10 +16,23 @@ import { RootStackPramList } from '../App';
 const previous = require('../images/back.png');
 
 type GenerateBillProps = NativeStackScreenProps<RootStackPramList>;
+interface CoinAded {
+  phoneNumber: string;
+  name: string;
+  time: string;
+  selectedCoin: Coin | null;
+}
+interface Coin {
+  id: number;
+  value: number;
+  validTill: string;
+}
 
 const GenerateBill = ({ navigation }: GenerateBillProps) => {
+  const [coinAded,setCoinAdded]=useState<CoinAded|null>(null)
   const [phoneNumber, setPhoneNumber] = useState('');
   const [name, setName] = useState('');
+  const [selectedCoin, setSelectedCoin] = useState<Coin | null>(null);
 
   const handlePhoneChange = (text: string) => {
     const cleanedPhoneNumber = text.replace(/[^0-9]/g, '');
@@ -31,9 +43,23 @@ const GenerateBill = ({ navigation }: GenerateBillProps) => {
     setName(text);
   };
 
+  const handleCoinSelect = (coin: Coin | null) => {
+    setSelectedCoin(coin);
+  };
+
   const handleSubmit = () => {
     if (phoneNumber.length === 10) {
-      Alert.alert('Success', 'Phone number is valid: ' + phoneNumber);
+      const currentTime = new Date().toISOString();
+      const billData = {
+        phoneNumber,
+        name,
+        time: currentTime,
+        selectedCoin,
+      };
+      console.log('Bill Data:', billData); // Replace this with your desired storage method
+      setCoinAdded(billData);
+      console.log('coinAded:', coinAded);
+      Alert.alert('Success', 'Bill generated successfully');
       navigation.navigate('Bill');
     } else {
       Alert.alert('Error', 'Please enter a valid phone number.');
@@ -75,7 +101,7 @@ const GenerateBill = ({ navigation }: GenerateBillProps) => {
             style={styles.inputField}
           />
           <View style={styles.cardsContainer}>
-            <Cards />
+            <Cards onCoinSelect={handleCoinSelect} />
           </View>
           <View style={styles.btnDiv}>
             <TouchableOpacity onPress={handleSubmit} style={styles.button}>
@@ -99,7 +125,7 @@ const styles = StyleSheet.create({
   },
   inputField: {
     backgroundColor: 'white',
-    elevation: 4,  
+    elevation: 4,
     marginVertical: 8,
     borderRadius: 8,
     color: 'black',
@@ -107,7 +133,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12, // Added vertical padding for better appearance
   },
   btnDiv: {
-    marginTop:300,
+    marginTop: 300,
     flexDirection: 'row',
     justifyContent: 'center',
     marginVertical: 10,
@@ -140,7 +166,6 @@ const styles = StyleSheet.create({
     width: 15,
   },
   mainDiv: {
-  
   },
   addBtn: {
     flex: 1,
@@ -166,7 +191,7 @@ const styles = StyleSheet.create({
   cardsContainer: {
     flex: 1,
     justifyContent: 'center',
-    height:400,
-    backgroundColor:"black"
+    height: 400,
+    backgroundColor: "black"
   },
 });

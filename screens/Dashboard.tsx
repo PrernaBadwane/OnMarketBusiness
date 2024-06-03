@@ -43,7 +43,7 @@ const Dashboard = ({ navigation }:DashboardProps) => {
     {
       id: '5',
       name: 'Coins',
-      onPress: () => navigation.navigate('Dashboard'),
+      onPress: () => navigation.navigate('Coins'),
     },
     {
       id: '6',
