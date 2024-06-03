@@ -30,6 +30,7 @@ interface Coin {
 
 const GenerateBill = ({ navigation }: GenerateBillProps) => {
   const [coinAded,setCoinAdded]=useState<CoinAded|null>(null)
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [name, setName] = useState('');
   const [selectedCoin, setSelectedCoin] = useState<Coin | null>(null);
@@ -59,8 +60,9 @@ const GenerateBill = ({ navigation }: GenerateBillProps) => {
       console.log('Bill Data:', billData); // Replace this with your desired storage method
       setCoinAdded(billData);
       console.log('coinAded:', coinAded);
+   
       Alert.alert('Success', 'Bill generated successfully');
-      navigation.navigate('Bill');
+      // navigation.navigate('Bill');
     } else {
       Alert.alert('Error', 'Please enter a valid phone number.');
     }
